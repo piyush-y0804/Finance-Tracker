@@ -1,4 +1,3 @@
-import csv
 import os
 
 income = 0
@@ -6,14 +5,19 @@ expense = 0
 TotalIncome = 0
 TotalExpense = 0
 
-def FinancialReport():
+def FileWrite():
+    with open("data.txt", "a") as f:
+        f.write(f"{income}, {expense}\n")
+
+
+def CalculateFinances():
+    global TotalIncome
+    global TotalExpense
     with open("data.txt") as f:
         for y in f:
             z = y.split(", ")
             TotalIncome += int(z[0])
             TotalExpense += int(z[1])
-        print(TotalIncome)
-        print(TotalExpense)
 
 def TakeInputIncome():
     return int(input("What is your income: \n"))
@@ -22,20 +26,21 @@ def TakeInputExpense():
     return int(input("What are the expenses(amount): \n"))
 
 def TakeOption():
-    return input("\n \nWhat would you like to do: \n 1.Add Income \n 2.Add Expense \n 3.See Financial Report \n Please choose a number: ")
+    return input("\nWhat would you like to do: \n 1.Add Income and Expense \n 2.See Financial Report \n Please choose a number: ")
 
 while True:
     option = TakeOption()
     print()
     if option == "1":
-        income += TakeInputIncome()
+        income = TakeInputIncome()
         print("Income added successfully!")
-    elif option == "2":
-        expense += TakeInputExpense()
+        expense = TakeInputExpense()
         print("Expense added successfully!")
-    elif option == "3":
-        
-        print("your income is: ", income)
-        print("your expense is: ", expense, "\n")
+        FileWrite()
+
+    elif option == "2":
+        CalculateFinances()
+        print("your income is: ", TotalIncome)
+        print("your expense is: ", TotalExpense, "\n")
     else:
         print("Please select a valid number! \n")
