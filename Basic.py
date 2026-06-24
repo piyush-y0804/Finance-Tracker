@@ -5,6 +5,8 @@ expense = 0
 TotalIncome = 0
 TotalExpense = 0
 Today = date.today()
+global savings
+savings = 0
 
 def FileWrite():
     with open("data.txt", "a") as f:
@@ -41,7 +43,10 @@ while True:
 
     elif option == "2":
         CalculateFinances()
-        print("your income is: ", TotalIncome)
-        print("your expense is: ", TotalExpense, "\n")
+        print("Your income is: ", TotalIncome)
+        print("Your expense is: ", TotalExpense)
+        savings = TotalIncome - TotalExpense
+        print("Your saving is: ", savings, "\n")
+        
     else:
         print("Please select a valid number! \n")
