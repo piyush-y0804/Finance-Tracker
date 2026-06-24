@@ -1,5 +1,19 @@
+import csv
+import os
+
 income = 0
 expense = 0
+TotalIncome = 0
+TotalExpense = 0
+
+def FinancialReport():
+    with open("data.txt") as f:
+        for y in f:
+            z = y.split(", ")
+            TotalIncome += int(z[0])
+            TotalExpense += int(z[1])
+        print(TotalIncome)
+        print(TotalExpense)
 
 def TakeInputIncome():
     return int(input("What is your income: \n"))
@@ -14,12 +28,13 @@ while True:
     option = TakeOption()
     print()
     if option == "1":
-        income = TakeInputIncome()
+        income += TakeInputIncome()
         print("Income added successfully!")
     elif option == "2":
-        expense = TakeInputExpense()
+        expense += TakeInputExpense()
         print("Expense added successfully!")
     elif option == "3":
+        
         print("your income is: ", income)
         print("your expense is: ", expense, "\n")
     else:
