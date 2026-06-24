@@ -1,13 +1,14 @@
-import os
+from datetime import date
 
 income = 0
 expense = 0
 TotalIncome = 0
 TotalExpense = 0
+Today = date.today()
 
 def FileWrite():
     with open("data.txt", "a") as f:
-        f.write(f"{income}, {expense}\n")
+        f.write(f"{income}, {expense}, {Today}\n")
 
 
 def CalculateFinances():
