@@ -27,7 +27,10 @@ def CalculateMonthlyFinances():
     monthly_data["Savings"] = (monthly_data["Income"] - monthly_data["Expense"])
     monthly_report = monthly_data
     time.sleep(1)
+    print("Monthly Report \n")
+    print("-" * 25)
     print(monthly_report)
+    print("-" * 25)
     print("\n")
     time.sleep(1)
 
@@ -40,12 +43,26 @@ def CalculateFinances():
             z = y.split(", ")
             TotalIncome += int(z[0])
             TotalExpense += int(z[1])
-            time.sleep(1)
     print("Your income is: ", TotalIncome)
     print("Your expense is: ", TotalExpense)
     savings = TotalIncome - TotalExpense
     print("Your saving is: ", savings, "\n")
     time.sleep(1)
+
+def CategoryReport():
+    df = pd.read_csv(
+        "data.txt",
+        sep=",",
+        names=["Income", "Expense", "Category", "Date"],
+        skipinitialspace=True
+    )
+
+    report = df.groupby("Category")["Expense"].sum()
+
+    print("\nExpense by Category\n")
+    print("-" * 25)
+    print(report)
+    print("-" * 25)
 
 def TakeInputIncome():
     return int(input("What is your income: \n"))
@@ -61,7 +78,8 @@ def TakeOption():
     "1.Add Income and Expense \n " \
     "2.See Financial Report \n " \
     "3. See Monthly Data \n " \
-    "4. Exit \n " \
+    "4. See Expense by category \n" \
+    "5. Exit \n " \
     "Please choose a number: ")
 
 while True:
@@ -83,6 +101,9 @@ while True:
         CalculateMonthlyFinances()
 
     elif option == "4":
+        CategoryReport()
+
+    elif option == "5":
         print("Successfully Logging Out \n")
         time.sleep(1)
         print("Thank You for using Finance Tracker! \n")
