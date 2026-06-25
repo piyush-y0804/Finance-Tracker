@@ -1,5 +1,6 @@
 from datetime import date
 import pandas as pd
+import matplotlib.pyplot as plt
 import time
 
 income = 0
@@ -10,6 +11,8 @@ Today = date.today()
 global savings
 savings = 0
 global category
+category= ""
+global categories
 
 def FileWrite():
     with open("data.txt", "a") as f:
@@ -71,7 +74,23 @@ def TakeInputExpense():
     return int(input("What are the expenses(amount): \n"))
 
 def TakeCategory():
-    return input("Enter expense category (Food, Transport, Shopping, Bills, Entertainment, Other): ")
+    categories = {
+        "1": "Food",
+        "2": "Transport",
+        "3": "Shopping",
+        "4": "Bills",
+        "5": "Entertainment",
+        "6": "Healthcare",
+        "7": "Other"
+    }
+
+    for key, value in categories.items():
+        print(f"{key}. {value}")
+
+    choice = input("Choose a valid number for the category: ")
+
+    return categories.get(choice, "Other")
+
 
 def TakeOption():
     return input("\nWhat would you like to do: \n " \
