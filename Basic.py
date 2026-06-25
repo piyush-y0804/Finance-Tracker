@@ -18,6 +18,35 @@ def FileWrite():
     with open("data.txt", "a") as f:
         f.write(f"{income}, {expense}, {category}, {Today}\n")
 
+def ExpensePieChart():
+    df = pd.read_csv(
+        "data.txt",
+        sep=",",
+        names=["Income", "Expense", "Category", "Date"],
+        skipinitialspace=True
+    )
+
+    category_expense = df.groupby("Category")["Expense"].sum()
+
+    category_expense = category_expense[category_expense > 0]
+
+    plt.figure(figsize=(8, 8))
+
+    explode = [0.02] * len(category_expense)
+
+    plt.pie(
+        category_expense,
+        labels=category_expense.index,
+        autopct="%1.1f%%",
+        startangle=90,
+        explode=explode,
+    )
+
+    plt.title("Expense by Category")
+    plt.axis("equal") 
+    plt.show()
+
+
 def CalculateMonthlyFinances():
     df = pd.read_csv(
         "data.txt",
@@ -97,7 +126,7 @@ def TakeOption():
     "1.Add Income and Expense \n " \
     "2.See Financial Report \n " \
     "3. See Monthly Data \n " \
-    "4. See Expense by category \n" \
+    "4. See Expense by category \n " \
     "5. Exit \n " \
     "Please choose a number: ")
 
@@ -121,6 +150,8 @@ while True:
 
     elif option == "4":
         CategoryReport()
+        print("\n")
+        ExpensePieChart()
 
     elif option == "5":
         print("Successfully Logging Out \n")
