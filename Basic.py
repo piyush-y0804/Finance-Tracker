@@ -9,24 +9,22 @@ TotalExpense = 0
 Today = date.today()
 global savings
 savings = 0
+global category
 
 def FileWrite():
     with open("data.txt", "a") as f:
-        f.write(f"{income}, {expense}, {Today}\n")
+        f.write(f"{income}, {expense}, {category}, {Today}\n")
 
 def CalculateMonthlyFinances():
     df = pd.read_csv(
         "data.txt",
-        names=["Income", "Expense", "Date"]
+        names=["Income", "Expense", "Category", "Date"]
     )
     
     df["Date"] = pd.to_datetime(df["Date"])
     df["Month"] = df["Date"].dt.strftime("%Y-%m")
     monthly_data = df.groupby("Month")[["Income", "Expense"]].sum()
-    monthly_data["Savings"] = (
-        monthly_data["Income"] - monthly_data["Expense"]
-    )
-
+    monthly_data["Savings"] = (monthly_data["Income"] - monthly_data["Expense"])
     monthly_report = monthly_data
     time.sleep(1)
     print(monthly_report)
@@ -55,6 +53,9 @@ def TakeInputIncome():
 def TakeInputExpense():
     return int(input("What are the expenses(amount): \n"))
 
+def TakeCategory():
+    return input("Enter expense category (Food, Transport, Shopping, Bills, Entertainment, Other): ")
+
 def TakeOption():
     return input("\nWhat would you like to do: \n " \
     "1.Add Income and Expense \n " \
@@ -71,6 +72,8 @@ while True:
         print("Income added successfully!")
         expense = TakeInputExpense()
         print("Expense added successfully!")
+        category = TakeCategory()
+        print("Category added successfully!")
         FileWrite()
 
     elif option == "2":
