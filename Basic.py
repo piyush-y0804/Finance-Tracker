@@ -2,24 +2,43 @@ from datetime import date
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
+import os
+
 
 income = 0
 expense = 0
 TotalIncome = 0
 TotalExpense = 0
 Today = date.today()
-global savings
-savings = 0
-global category
-category= ""
 global categories
+global savings
+global category
+savings = 0
+category= ""
+
 
 def FileWrite():
     with open("data.txt", "a") as f:
         f.write(f"{income}, {expense}, {category}, {Today}\n")
 
 
+def DataFileExists():
+    if not os.path.exists("data.txt"):
+        print("No financial data found.")
+        return False
+
+    if os.path.getsize("data.txt") == 0:
+        print("No financial data found.")
+        return False
+
+    return True
+
+
 def ExpensePieChart():
+
+    if not DataFileExists():
+        return
+    
     df = pd.read_csv(
         "data.txt",
         sep=",",
@@ -49,6 +68,10 @@ def ExpensePieChart():
 
 
 def CalculateMonthlyFinances():
+
+    if not DataFileExists():
+        return
+    
     df = pd.read_csv(
         "data.txt",
         names=["Income", "Expense", "Category", "Date"]
@@ -88,13 +111,18 @@ def CalculateFinances():
     TotalIncome = 0
     TotalExpense = 0
 
-    with open("data.txt") as f:
-        for line in f:
-            income, expense, _, _ = line.strip().split(", ")
-            TotalIncome += int(income)
-            TotalExpense += int(expense)
+    if not DataFileExists():
+        return
 
-    savings = TotalIncome - TotalExpense
+    df = pd.read_csv(
+        "data.txt",
+        sep=",",
+        names=["Income","Expense","Category","Date"],
+        skipinitialspace=True
+    )
+
+    TotalIncome = df["Income"].sum()
+    TotalExpense = df["Expense"].sum()
 
     report = pd.DataFrame({
         "Amount": [TotalIncome, TotalExpense, savings]
@@ -104,9 +132,14 @@ def CalculateFinances():
     print("-" * 30)
     print(report)
     print("-" * 30)
+    time.sleep(1)
 
 
 def CategoryReport():
+
+    if not DataFileExists():
+        return
+    
     df = pd.read_csv(
         "data.txt",
         sep=",",
@@ -124,6 +157,10 @@ def CategoryReport():
     print("-" * 25)
     print(report)
     print("-" * 25)
+
+    if report.empty:
+        print("No expense data available.")
+        return
 
     highest = report.loc[report["Total Expense"].idxmax()]
     print("\nHighest Spending Category")
@@ -197,34 +234,38 @@ def TakeOption():
 
         print("Please choose a valid option.\n")
 
-while True:
-    option = TakeOption()
-    print()
-    if option == "1":
-        income = TakeInputIncome()
-        print("Income added successfully! \n")
-        expense = TakeInputExpense()
-        print("Expense added successfully! \n")
-        category = TakeCategory()
-        print("Category added successfully! \n")
-        FileWrite()
+def main():
+    while True:
+        option = TakeOption()
+        print()
+        if option == "1":
+            income = TakeInputIncome()
+            print("Income added successfully! \n")
+            expense = TakeInputExpense()
+            print("Expense added successfully! \n")
+            category = TakeCategory()
+            print("Category added successfully! \n")
+            FileWrite()
 
-    elif option == "2":
-        CalculateFinances()
+        elif option == "2":
+            time.sleep(0.5)
+            CalculateFinances()
 
-    elif option == "3":
-        CalculateMonthlyFinances()
+        elif option == "3":
+            CalculateMonthlyFinances()
 
-    elif option == "4":
-        CategoryReport()
-        print("\n")
-        ExpensePieChart()
+        elif option == "4":
+            CategoryReport()
+            print("\n")
+            ExpensePieChart()
 
-    elif option == "5":
-        print("Successfully Logging Out \n")
-        time.sleep(1)
-        print("Thank You for using Finance Tracker! \n")
-        break
+        elif option == "5":
+            print("Successfully Logging Out \n")
+            time.sleep(1)
+            print("Thank You for using Finance Tracker! \n")
+            break
 
-    else:
-        print("Please select a valid number! \n")
+        else:
+            print("Please select a valid number! \n")
+
+main()
