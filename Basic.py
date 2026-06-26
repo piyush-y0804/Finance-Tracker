@@ -118,34 +118,27 @@ def CategoryReport():
     print(f"Amount   : ₹{highest['Total Expense']:,}")
 
 
-def TakeInputIncome():
-    while True:
-        try:
-            income = int(input("What is your income: "))
+def TakePositiveInteger(prompt):
 
-            if income < 0:
-                print("Please enter a non-negative integer\n")
+    while True:
+
+        try:
+            value = int(input(prompt))
+
+            if value < 0:
+                print("Please enter a non-negative number.\n")
                 continue
 
-            return income
+            return value
 
         except ValueError:
             print("Please enter a valid integer.\n")
 
+def TakeInputIncome():
+    return TakePositiveInteger("What is your income: ")
 
 def TakeInputExpense():
-    while True:
-        try:
-            expense = int(input("What are the expenses(amount): "))
-
-            if expense < 0:
-                print("Please enter a non-negative integer\n")
-                continue
-
-            return expense
-
-        except ValueError:
-            print("Please enter a valid integer.\n")
+    return TakePositiveInteger("What are the expenses(amount): ")
 
 
 def TakeCategory():
