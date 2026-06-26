@@ -119,11 +119,33 @@ def CategoryReport():
 
 
 def TakeInputIncome():
-    return int(input("What is your income: \n"))
+    while True:
+        try:
+            income = int(input("What is your income: "))
+
+            if income < 0:
+                print("Please enter a non-negative integer\n")
+                continue
+
+            return income
+
+        except ValueError:
+            print("Please enter a valid integer.\n")
 
 
 def TakeInputExpense():
-    return int(input("What are the expenses(amount): \n"))
+    while True:
+        try:
+            expense = int(input("What are the expenses(amount): "))
+
+            if expense < 0:
+                print("Please enter a non-negative integer\n")
+                continue
+
+            return expense
+
+        except ValueError:
+            print("Please enter a valid integer.\n")
 
 
 def TakeCategory():
@@ -137,22 +159,36 @@ def TakeCategory():
         "7": "Other"
     }
 
-    for key, value in categories.items():
-        print(f"{key}. {value}")
+    while True:
 
-    choice = input("Choose a valid number for the category: ")
+        for key, value in categories.items():
+            print(f"{key}. {value}")
 
-    return categories.get(choice, "Other")
+        choice = input("Choose a category: ")
+
+        if choice in categories:
+            return categories[choice]
+
+        print("Invalid choice. Please try again.\n")
 
 
 def TakeOption():
-    return input("\nWhat would you like to do: \n " \
-    "1. Add Income and Expense \n " \
-    "2. See Financial Report \n " \
-    "3. See Monthly Data \n " \
-    "4. See Expense by category \n " \
-    "5. Exit \n " \
-    "Please choose a number: ")
+    while True:
+
+        option = input(
+            "\nWhat would you like to do:\n"
+            "1. Add Income and Expense\n"
+            "2. See Financial Report\n"
+            "3. See Monthly Data\n"
+            "4. See Expense by Category\n"
+            "5. Exit\n"
+            "Please choose a number: "
+        )
+
+        if option in ["1", "2", "3", "4", "5"]:
+            return option
+
+        print("Please choose a valid option.\n")
 
 while True:
     option = TakeOption()
