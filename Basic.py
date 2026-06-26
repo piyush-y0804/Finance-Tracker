@@ -57,6 +57,8 @@ def CalculateMonthlyFinances():
     df["Date"] = pd.to_datetime(df["Date"])
     df["Month"] = df["Date"].dt.strftime("%Y-%m")
     monthly_data = df.groupby("Month")[["Income", "Expense"]].sum()
+
+    
     monthly_data["Savings"] = (monthly_data["Income"] - monthly_data["Expense"])
     monthly_report = monthly_data
     time.sleep(1)
@@ -66,6 +68,18 @@ def CalculateMonthlyFinances():
     print("-" * 25)
     print("\n")
     time.sleep(1)
+
+    monthly_data[["Income", "Expense"]].plot(
+    kind="bar",
+    figsize=(8, 5)
+)
+
+    plt.title("Monthly Income vs Expense")
+    plt.xlabel("Month")
+    plt.ylabel("Amount (₹)")
+    plt.xticks(rotation=0)
+    plt.tight_layout()
+    plt.show()
 
 
 def CalculateFinances():
