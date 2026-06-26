@@ -18,6 +18,7 @@ def FileWrite():
     with open("data.txt", "a") as f:
         f.write(f"{income}, {expense}, {category}, {Today}\n")
 
+
 def ExpensePieChart():
     df = pd.read_csv(
         "data.txt",
@@ -90,6 +91,7 @@ def CalculateFinances():
     print(report)
     print("-" * 30)
 
+
 def CategoryReport():
     df = pd.read_csv(
         "data.txt",
@@ -109,11 +111,20 @@ def CategoryReport():
     print(report)
     print("-" * 25)
 
+    highest = report.loc[report["Total Expense"].idxmax()]
+    print("\nHighest Spending Category")
+    print("-" * 30)
+    print(f"Category : {highest['Category']}")
+    print(f"Amount   : ₹{highest['Total Expense']:,}")
+
+
 def TakeInputIncome():
     return int(input("What is your income: \n"))
 
+
 def TakeInputExpense():
     return int(input("What are the expenses(amount): \n"))
+
 
 def TakeCategory():
     categories = {
