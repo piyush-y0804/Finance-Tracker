@@ -70,16 +70,25 @@ def CalculateMonthlyFinances():
 def CalculateFinances():
     global TotalIncome
     global TotalExpense
+    TotalIncome = 0
+    TotalExpense = 0
+
     with open("data.txt") as f:
-        for y in f:
-            z = y.split(", ")
-            TotalIncome += int(z[0])
-            TotalExpense += int(z[1])
-    print("Your income is: ", TotalIncome)
-    print("Your expense is: ", TotalExpense)
+        for line in f:
+            income, expense, _, _ = line.strip().split(", ")
+            TotalIncome += int(income)
+            TotalExpense += int(expense)
+
     savings = TotalIncome - TotalExpense
-    print("Your saving is: ", savings, "\n")
-    time.sleep(1)
+
+    report = pd.DataFrame({
+        "Amount": [TotalIncome, TotalExpense, savings]
+    }, index=["Total Income", "Total Expense", "Savings"])
+
+    print("\nFinancial Report")
+    print("-" * 30)
+    print(report)
+    print("-" * 30)
 
 def CategoryReport():
     df = pd.read_csv(
@@ -89,7 +98,11 @@ def CategoryReport():
         skipinitialspace=True
     )
 
-    report = df.groupby("Category")["Expense"].sum()
+    report = (
+    df.groupby("Category")["Expense"]
+      .sum()
+      .reset_index(name="Total Expense")
+    )
 
     print("\nExpense by Category\n")
     print("-" * 25)
@@ -123,8 +136,8 @@ def TakeCategory():
 
 def TakeOption():
     return input("\nWhat would you like to do: \n " \
-    "1.Add Income and Expense \n " \
-    "2.See Financial Report \n " \
+    "1. Add Income and Expense \n " \
+    "2. See Financial Report \n " \
     "3. See Monthly Data \n " \
     "4. See Expense by category \n " \
     "5. Exit \n " \
@@ -135,11 +148,11 @@ while True:
     print()
     if option == "1":
         income = TakeInputIncome()
-        print("Income added successfully!")
+        print("Income added successfully! \n")
         expense = TakeInputExpense()
-        print("Expense added successfully!")
+        print("Expense added successfully! \n")
         category = TakeCategory()
-        print("Category added successfully!")
+        print("Category added successfully! \n")
         FileWrite()
 
     elif option == "2":
